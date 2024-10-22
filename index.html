@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triangulation Calculator</title>
+<style>
+body {
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+background-color: #1e1e1e;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+margin: 0;
+color: #fff;
+}
+
+.container {
+background-color: #2b2b2b;
+padding: 40px;
+border-radius: 20px;
+box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+width: 100%;
+max-width: 800px;
+border: 2px solid #ff4500;
+}
+
+h1 {
+text-align: center;
+color: #ff4500;
+margin-bottom: 30px;
+font-size: 2em;
+}
+
+.label {
+margin-top: 20px;
+color: #ff4500;
+font-weight: bold;
+font-size: 1.2em;
+}
+
+.input-group {
+display: flex;
+justify-content: space-between;
+}
+
+.input-group input {
+width: 30%;
+padding: 12px;
+margin-top: 5px;
+border: 2px solid #ccc;
+border-radius: 10px;
+box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+transition: border-color 0.3s, box-shadow 0.3s;
+font-size: 1.2em;
+background-color: #2b2b2b;
+color: #ffffff;
+}
+
+input:focus {
+border-color: #ff4500;
+box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+outline: none;
+}
+
+button {
+width: 100%;
+padding: 15px;
+margin-top: 30px;
+background-color: #ff4500;
+color: #fff;
+border: none;
+border-radius: 10px;
+cursor: pointer;
+box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+font-size: 1.2em;
+}
+
+button:hover {
+background-color: #e03d00;
+transform: translateY(-3px);
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+#result {
+margin-top: 30px;
+text-align: center;
+color: #ff4500;
+font-weight: bold;
+font-size: 1.5em;
+}
+</style>
+<script>
+function calculateIntersection(z1, x1, angle1, z2, x2, angle2) {
+const angle1Radians = angle1 * (Math.PI / 180);
+const angle2Radians = angle2 * (Math.PI / 180);
+
+const tan1 = Math.tan(angle1Radians);
+const tan2 = Math.tan(angle2Radians);
+
+const x = (z2 - z1 + tan1 * x1 - tan2 * x2) / (tan1 - tan2);
+const z = z1 + tan1 * (x - x1);
+
+return { x, z };
+}
+
+function calculate() {
+const z1 = parseFloat(document.getElementById('z1').value);
+const x1 = parseFloat(document.getElementById('x1').value);
+const angle1 = parseFloat(document.getElementById('angle1').value);
+const z2 = parseFloat(document.getElementById('z2').value);
+const x2 = parseFloat(document.getElementById('x2').value);
+const angle2 = parseFloat(document.getElementById('angle2').value);
+
+if (isNaN(z1) || isNaN(x1) || isNaN(angle1) || isNaN(z2) || isNaN(x2) || isNaN(angle2)) {
+document.getElementById('result').innerText = 'Введите все значения';
+return;
+}
+
+const { x, z } = calculateIntersection(z1, x1, angle1, z2, x2, angle2);
+document.getElementById('result').innerText = `Координаты пересечения: (${x.toFixed(2)}, ${z.toFixed(2)})`;
+}
+
+document.addEventListener('input', calculate);
+</script>
+</head>
+<body>
+<div class="container">
+<h1>Triangulation Calculator</h1>
+<div class="label">Точка 1:</div>
+<div class="input-group">
+<input type="number" id="z1" placeholder="Z1" step="any">
+<input type="number" id="x1" placeholder="X1" step="any">
+<input type="number" id="angle1" placeholder="Угол 1" step="any">
+</div>
+<div class="label">Точка 2:</div>
+<div class="input-group">
+<input type="number" id="z2" placeholder="Z2" step="any">
+<input type="number" id="x2" placeholder="X2" step="any">
+<input type="number" id="angle2" placeholder="Угол 2" step="any">
+</div>
+<p id="result"></p>
+</div>
+</body>
+</html>
